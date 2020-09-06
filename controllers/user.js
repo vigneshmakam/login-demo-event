@@ -190,7 +190,8 @@ exports.postUpdatePassword = (req, res, next) => {
 /**
  * POST /account/delete
  * Delete user account.
- */
+*/
+
 exports.postDeleteAccount = (req, res, next) => {
   User.deleteOne({ _id: req.user.id }, (err) => {
     if (err) { return next(err); }
