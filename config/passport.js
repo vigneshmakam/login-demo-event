@@ -294,6 +294,7 @@ passport.use(new TwitterStrategy({
 
 /**
  * Sign in with Google.
+ * Check link for scopes - https://www.googleapis.com/discovery/v1/apis/oauth2/v2/rest?fields=auth(oauth2(scopes))
  */
 const googleStrategyConfig = new GoogleStrategy({
   clientID: process.env.GOOGLE_ID,
