@@ -33,7 +33,8 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
-
+const chatController = require('./controllers/chat_app');
+const chatController = require('./controllers/appointment'); //controller for appintment
 /**
  * API keys and Passport configuration.
  */
@@ -42,7 +43,10 @@ const passportConfig = require('./config/passport');
 /**
  * Create Express server.
  */
+// const app = express();
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 /**
  * Connect to MongoDB.
@@ -64,7 +68,11 @@ mongoose.connection.on('error', (err) => {
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+var engines = require('consolidate');
+// app.set('view engine', 'pug'); //ejs or hbs
+app.engine('html', engines.swig); // take note, using 'html', not 'ejs' or 'pug'..
+app.set('view engine', 'pug'); // also 'html' here.
+
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
@@ -145,7 +153,10 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
-
+app.get('/chat_app', passportConfig.isAuthenticated, chatController.getchat);
+app.post('/chat_app', passportConfig.isAuthenticated, chatController.postchat);
+app.post('/appointment', passportConfig.isAuthenticated, appointmentController.getappointment);
+app.post('/appointment', passportConfig.isAuthenticated, appointmentController.postappointment);
 /**
  * API examples routes.
  */
@@ -243,6 +254,7 @@ app.get('/auth/quickbooks/callback', passport.authorize('quickbooks', { failureR
   res.redirect(req.session.returnTo);
 });
 
+
 /**
  * Error Handler.
  */
@@ -259,9 +271,12 @@ if (process.env.NODE_ENV === 'development') {
 /**
  * Start Express server.
  */
-app.listen(app.get('port'), () => {
+
+server.listen(app.get('port'), () => {
   console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
   console.log('  Press CTRL-C to stop\n');
 });
+
+
 
 module.exports = app;

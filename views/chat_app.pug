@@ -1,0 +1,36 @@
+extends ../views/layout
+
+
+block content
+  .pb-2.mt-2.mb-4.border-bottom
+    h3 Chat Forum
+
+  form(id='message-form', method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+
+    .form-group.row
+     label.col-md-3.col-form-label.font-weight-bold.text-right(for='title') Title
+
+     .col-md-7
+      input.form-control(type='textarea', name='title', id='title', placeholder='Title', autofocus, required)
+
+    .form-group.row
+      label.col-md-3.col-form-label.font-weight-bold.text-right(for='message') Message
+
+      .col-md-7
+        .row-md-20
+        input.form-control(type='textarea', name='message', id='message', placeholder='Message', autofocus, required)
+    .form-group.offset-sm-3.col-md-7.pl-2
+
+    .form-group.row
+      label.col-md-3.col-form-label.font-weight-bold.text-right(for='tags') Tags
+
+      .col-md-7
+        .row-md-20
+        input.form-control(type='textarea', name='tag', id='tag', placeholder='Tag', autofocus, required)
+    .form-group.offset-sm-3.col-md-7.pl-2
+
+
+      button.btn.btn-success(type='submit')
+        i.fas.fa-user-plus.fa-sm
+        | Submit
