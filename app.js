@@ -34,7 +34,7 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const chatController = require('./controllers/chat_app');
-const chatController = require('./controllers/appointment'); //controller for appintment
+const appointmentController = require('./controllers/appointment'); //controller for appintment
 /**
  * API keys and Passport configuration.
  */
